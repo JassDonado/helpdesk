@@ -1,13 +1,8 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { Estado, NuevoRegistro, Registro } from '../models/registro.model';
 
-/**
- * Servicio en memoria de la mesa de ayuda.
- * No usa HttpClient ni rutas: el estado vive en una signal privada.
- */
 @Injectable({ providedIn: 'root' })
 export class RegistroService {
-  /** Signal privada: única fuente de verdad de los tickets. */
   private readonly _registros = signal<Registro[]>([
     {
       id: 'demo-1',
@@ -35,30 +30,22 @@ export class RegistroService {
     },
   ]);
 
-  /** Signal pública de solo lectura que consumen los componentes. */
   readonly registros = this._registros.asReadonly();
 
-  /** Computed: cantidad total de registros. */
   readonly total = computed(() => this._registros().length);
 
-  /** Computed: registros con estado "Pendiente". */
   readonly pendientes = computed(
     () => this._registros().filter((registro) => registro.estado === 'Pendiente').length,
   );
 
-  /** Computed extra para el panel de resumen. */
   readonly enProceso = computed(
     () => this._registros().filter((registro) => registro.estado === 'En proceso').length,
   );
 
-  /** Computed extra para el panel de resumen. */
   readonly resueltos = computed(
     () => this._registros().filter((registro) => registro.estado === 'Resuelto').length,
   );
 
-  /**
-   * Agrega un ticket generando un arreglo NUEVO (inmutabilidad con update()).
-   */
   agregar(datos: NuevoRegistro): void {
     const nuevo: Registro = {
       ...datos,
@@ -70,9 +57,6 @@ export class RegistroService {
     this._registros.update((registros) => [...registros, nuevo]);
   }
 
-  /**
-   * Cambia el estado de un ticket sin mutar el arreglo original.
-   */
   cambiarEstado(id: string, nuevoEstado: Estado): void {
     this._registros.update((registros) =>
       registros.map((registro) =>
@@ -81,9 +65,6 @@ export class RegistroService {
     );
   }
 
-  /**
-   * Elimina un ticket devolviendo un arreglo nuevo (sin .splice()).
-   */
   eliminar(id: string): void {
     this._registros.update((registros) => registros.filter((registro) => registro.id !== id));
   }

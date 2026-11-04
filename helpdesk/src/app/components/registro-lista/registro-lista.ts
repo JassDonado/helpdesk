@@ -9,10 +9,8 @@ import { RegistroService } from '../../services/registro.service';
 export class RegistroLista {
   private readonly registroService = inject(RegistroService);
 
-  /** Signal pública expuesta por el servicio. */
   protected readonly registros = this.registroService.registros;
 
-  /** Computed del servicio usados en el panel de resumen. */
   protected readonly total = this.registroService.total;
   protected readonly pendientes = this.registroService.pendientes;
   protected readonly enProceso = this.registroService.enProceso;
@@ -20,18 +18,15 @@ export class RegistroLista {
 
   protected readonly estados: Estado[] = ['Pendiente', 'En proceso', 'Resuelto'];
 
-  /** Cambia el estado del ticket a partir del select de cada tarjeta. */
   protected cambiarEstado(id: string, evento: Event): void {
     const nuevoEstado = (evento.target as HTMLSelectElement).value as Estado;
     this.registroService.cambiarEstado(id, nuevoEstado);
   }
 
-  /** Elimina un ticket de la mesa de ayuda. */
   protected eliminar(id: string): void {
     this.registroService.eliminar(id);
   }
 
-  /** Clases del badge según la prioridad del ticket. */
   protected clasesPrioridad(prioridad: Registro['prioridad']): string {
     switch (prioridad) {
       case 'Crítica':
