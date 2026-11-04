@@ -1,12 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { RegistroForm } from './components/registro-form/registro-form';
+import { RegistroLista } from './components/registro-lista/registro-lista';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
+  imports: [RegistroForm, RegistroLista],
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {
-  protected readonly title = signal('helpdesk');
-}
+export class App {}

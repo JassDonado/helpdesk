@@ -15,10 +15,10 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render the help desk title', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, helpdesk');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Mesa de ayuda de TI');
   });
 });

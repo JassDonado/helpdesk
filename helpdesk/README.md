@@ -1,59 +1,55 @@
-# Helpdesk
+# Mesa de ayuda de TI · Taller 06
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.8.
+Aplicación Angular de una sola pantalla para el registro y seguimiento de tickets de soporte.
+Corresponde al escenario **E1 - Mesa de ayuda de TI** del Taller 06.
 
-## Development server
+## Requisitos del taller cubiertos
 
-To start a local development server, run:
+| Requisito | Dónde se implementa |
+| --- | --- |
+| Sin `NgModule` (solo standalone) | `src/main.ts`, `src/app/app.config.ts` y componentes con `imports` |
+| Control flow nuevo (`@if`, `@for`, `@empty`, `@defer`) | `app.html`, `registro-form.html`, `registro-lista.html` |
+| Estado con Signals e inmutabilidad (`update()`) | `src/app/services/registro.service.ts` |
+| Formularios reactivos sin `ngModel` | `src/app/components/registro-form/registro-form.ts` |
+| Modelo tipado `Registro` + `Item` | `src/app/models/registro.model.ts` |
+| Validador propio de control | `sinSoloEspacios` en `src/app/validators/registro.validators.ts` |
+| Validador de grupo (prioridad «Crítica» ⇒ impacto obligatorio) | `impactoObligatorioSiCritica` en `src/app/validators/registro.validators.ts` |
+| `FormArray` de equipos con validador de mínimo 1 fila | `alMenosUnEquipo` en `src/app/validators/registro.validators.ts` |
+| Resumen con `computed` dentro de `@defer (on interaction)` | `registro-lista.html` |
 
-```bash
-ng serve
+## Estructura
+
+```
+src/app/
+├── models/registro.model.ts            # Interfaces y tipos del dominio
+├── services/registro.service.ts        # Signal privada, asReadonly(), computed y CRUD
+├── validators/registro.validators.ts   # Validadores de control, grupo y FormArray
+├── components/
+│   ├── registro-form/                  # Formulario reactivo + FormArray de equipos
+│   └── registro-lista/                 # Listado, cambio de estado y resumen diferido
+├── app.ts                              # Componente raíz (standalone)
+└── app.html                            # Layout de la pantalla
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Reglas de negocio
 
-## Code scaffolding
+- **Prioridad «Crítica»**: el campo `impacto` pasa a ser obligatorio (validación cruzada de grupo).
+- **Equipos afectados**: el `FormArray` exige al menos una fila; cada fila requiere `codigo` y `ubicacion`.
+- **Solicitante**: no se aceptan cadenas vacías ni formadas solo por espacios.
+- **Estados**: todo ticket nuevo inicia en `Pendiente` y puede pasar a `En proceso` o `Resuelto`.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Desarrollo
 
 ```bash
-ng generate --help
+npm install
+npm start          # http://localhost:4200
 ```
 
-## Building
-
-To build the project run:
+## Build y pruebas
 
 ```bash
-ng build
+npm run build
+npm test           # Vitest + jsdom
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+> El proyecto usa Angular 22 con componentes standalone, Tailwind CSS 4 y Vitest.
