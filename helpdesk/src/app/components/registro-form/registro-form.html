@@ -183,7 +183,7 @@
       </div>
 
       <div formArrayName="equipos" class="space-y-3">
-        @for (equipo of equipos.controls; track equipo; let i = $index) {
+        @for (equipo of equipos.controls; track $index; let i = $index) {
           <div [formGroupName]="i" class="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
             <div>
               <input
